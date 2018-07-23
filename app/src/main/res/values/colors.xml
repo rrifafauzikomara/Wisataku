@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#29B6F6</color>
+    <color name="bluePrimary">#2396F1</color>
+    <color name="skyBlue">#29B6F6</color>
+
+    <color name="colorPrimary">@color/blue</color>
+    <color name="colorPrimaryDark">@color/bluePrimary</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorPrimaryText">#000000</color>
+    <color name="pureWhite">#ffffff</color>
+    <color name="white">@color/pureWhite</color>
+    <color name="bg_login">@color/colorPrimary</color>
+</resources>
