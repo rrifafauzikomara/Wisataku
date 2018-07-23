@@ -197,7 +197,7 @@ public class AdminProfile extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);
                     success = jObj.getInt(TAG_SUCCESS);
                     if (success == 1) {
-                        Intent intent = new Intent(AdminProfile.this, HomeActivity.class);
+                        Intent intent = new Intent(AdminProfile.this, HomeAdmin.class);
                         startActivity(intent);
                         Log.e("v Add", jObj.toString());
                         Toast.makeText(AdminProfile.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();

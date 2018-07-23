@@ -96,6 +96,10 @@ public class LoginAdmin extends AppCompatActivity {
             }
         });
 
+        //membuat back button toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
     }
 
     public void register (View v) {
@@ -179,6 +183,14 @@ public class LoginAdmin extends AppCompatActivity {
     public void onBackPressed() {
         Intent pilih = new Intent(getApplicationContext(), PilihActivity.class);
         startActivity(pilih);
+    }
+
+    //membuat fungsi back dengan mengirim data session
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent pilih = new Intent(getApplicationContext(), PilihActivity.class);
+        startActivity(pilih);
+        return true;
     }
 
 }

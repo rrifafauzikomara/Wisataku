@@ -17,6 +17,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bayu.fajar.wisataku.Admin.AdminProfile;
+import com.bayu.fajar.wisataku.Admin.HomeAdmin;
 import com.bayu.fajar.wisataku.PilihActivity;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.AppController;
@@ -94,6 +96,10 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+
+        //membuat back button toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
@@ -178,6 +184,14 @@ public class Login extends AppCompatActivity {
     public void onBackPressed() {
         Intent pilih = new Intent(getApplicationContext(), PilihActivity.class);
         startActivity(pilih);
+    }
+
+    //membuat fungsi back dengan mengirim data session
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent pilih = new Intent(getApplicationContext(), PilihActivity.class);
+        startActivity(pilih);
+        return true;
     }
 
 }

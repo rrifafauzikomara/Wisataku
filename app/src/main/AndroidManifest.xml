@@ -32,8 +32,10 @@
             android:name=".Wisatawan.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PilihActivity" />
-        <activity android:name=".Wisatawan.Login" />
-        <activity android:name=".Admin.LoginAdmin" />
+        <activity android:name=".Wisatawan.Login"
+            android:label="Login Sebagai Wisatawan"/>
+        <activity android:name=".Admin.LoginAdmin"
+            android:label="Login Sebagai Admin"/>
         <activity
             android:name=".Wisatawan.Profile"
             android:label="Profile" />
