@@ -40,7 +40,8 @@
             android:name=".Admin.HomeAdmin"
             android:label="Admin"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Admin.AdminProfile" />
+        <activity android:name=".Admin.AdminProfile"
+            android:label="Profile"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -52,7 +53,8 @@
         <activity
             android:name=".Admin.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".Register"/>
+        <activity android:name=".Register"
+            android:label="Register"/>
     </application>
 
 </manifest>

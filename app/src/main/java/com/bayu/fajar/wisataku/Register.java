@@ -70,18 +70,18 @@ public class Register extends AppCompatActivity {
         spLevel.setAdapter(dataAdapter);
 
         //membuat back button toolbar
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
     //membuat fungsi back dengan mengirim data session
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        Intent intent = new Intent(getApplicationContext(), HomeKubikasi.class);
-//        startActivity(intent);
-//        return true;
-//    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        startActivity(intent);
+        return true;
+    }
 
     public void daftar (View view) {
         String nama = txt_nama.getText().toString();
@@ -164,4 +164,9 @@ public class Register extends AppCompatActivity {
             pDialog.dismiss();
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        startActivity(intent);
+    }
 }

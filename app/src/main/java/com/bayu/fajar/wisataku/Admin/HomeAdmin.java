@@ -36,7 +36,7 @@ public class HomeAdmin extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private EndDrawerToggle drawerToggle;
-    String id, level;
+    String idx, level;
 
     //untuk login session
     SharedPreferences sharedpreferences;
@@ -59,7 +59,7 @@ public class HomeAdmin extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         sharedpreferences = getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
-        id = sharedpreferences.getString(TAG_ID, null);
+        idx = sharedpreferences.getString(TAG_ID, null);
         level = sharedpreferences.getString(TAG_LEVEL, null);
 
         initNavigationDrawer();
@@ -75,7 +75,7 @@ public class HomeAdmin extends AppCompatActivity {
                 switch (id){
                     case R.id.nav_admin_profile:
                         Intent intent = new Intent(HomeAdmin.this, AdminProfile.class);
-                        intent.putExtra(TAG_ID, id);
+                        intent.putExtra(TAG_ID, idx);
                         startActivity(intent);
                         break;
                     case R.id.nav_admin_maps:
@@ -130,7 +130,7 @@ public class HomeAdmin extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
                 RequestHandler rh = new RequestHandler();
-                String s = rh.sendGetRequestParam(urlp,id);
+                String s = rh.sendGetRequestParam(urlp,idx);
                 return s;
             }
         }
