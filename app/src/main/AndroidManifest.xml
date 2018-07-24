@@ -31,15 +31,17 @@
             android:name=".Wisatawan.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Login"/>
+            android:name=".Login"
+            android:theme="@style/AppTheme.SplashScreen"/>
         <activity
             android:name=".Wisatawan.Profile"
             android:label="Profile" />
-        <activity android:name=".Wisatawan.DetailLokasi" />
+        <activity android:name=".Wisatawan.DetailLokasi"
+            android:theme="@style/AppTheme.SplashScreen"/>
         <activity
             android:name=".Admin.HomeAdmin"
             android:label="Admin"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.SplashScreen" />
         <activity android:name=".Admin.AdminProfile"
             android:label="Profile"/>
 

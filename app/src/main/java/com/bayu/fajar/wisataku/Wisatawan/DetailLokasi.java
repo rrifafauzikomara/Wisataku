@@ -3,6 +3,7 @@ package com.bayu.fajar.wisataku.Wisatawan;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.bayu.fajar.wisataku.R;
@@ -27,8 +28,10 @@ public class DetailLokasi extends AppCompatActivity {
         txt_desk.setText(getIntent().getStringExtra("deskripsi"));
 
         //membuat back button toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Detail Wisata");
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null)getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
