@@ -55,7 +55,7 @@ public class AdminProfile extends AppCompatActivity {
     ConnectivityManager conMgr;
 
     //untuk mengambil data session saat login
-    String id, nama, email, foto;
+    String id;
     private String TAG_NAMA = "nama";
     private String TAG_EMAIL = "email";
     private String TAG_FOTO = "foto";
@@ -68,7 +68,7 @@ public class AdminProfile extends AppCompatActivity {
     private String UPLOAD_URL = Server.URLA + "upload.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private String TAG_ID = "id_admin";
+    private String TAG_ID = "id_user";
 
     String tag_json_obj = "json_obj_req";
 

@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity
     View header;
     TextView txt_nama, txt_email;
     CircleImageView user_picture;
-    String idx;
+    String idx, level;
 
     //untuk login session
     SharedPreferences sharedpreferences;
@@ -57,6 +57,7 @@ public class HomeActivity extends AppCompatActivity
     public final static String TAG_NAMA = "nama";
     public final static String TAG_EMAIL = "email";
     public final static String TAG_FOTO = "foto";
+    private String TAG_LEVEL = "level";
 
     //untuk show profile
     private String urlp = Server.showProfil;
@@ -67,7 +68,7 @@ public class HomeActivity extends AppCompatActivity
     RecyclerView.LayoutManager mManager;
     List<ModelData> mItems;
     ProgressDialog pd;
-    private String urld = Server.URL + "detail_lokasi.php";
+    private String urld = Server.URLU + "detail_lokasi.php";
     public static final String TAG_IDL       = "id_lokasi";
     public static final String TAG_NAMAL     = "nama";
 //    public static final String TAG_LNG      = "lng";
@@ -87,6 +88,7 @@ public class HomeActivity extends AppCompatActivity
         //untuk mengambil data login session
         sharedpreferences = getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
         idx = sharedpreferences.getString(TAG_ID, null);
+        level = sharedpreferences.getString(TAG_LEVEL, null);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {

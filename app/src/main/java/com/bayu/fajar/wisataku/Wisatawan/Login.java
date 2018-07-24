@@ -17,10 +17,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.bayu.fajar.wisataku.Admin.AdminProfile;
 import com.bayu.fajar.wisataku.Admin.HomeAdmin;
-import com.bayu.fajar.wisataku.PilihActivity;
 import com.bayu.fajar.wisataku.R;
+import com.bayu.fajar.wisataku.Register;
 import com.bayu.fajar.wisataku.Server.AppController;
 import com.bayu.fajar.wisataku.Server.Server;
 
@@ -70,13 +69,23 @@ public class Login extends AppCompatActivity {
         level = sharedpreferences.getString(TAG_LEVEL, null);
 
         if (session) {
-            Intent intent = new Intent(Login.this, HomeActivity.class);
-            intent.putExtra(TAG_ID, id);
-            intent.putExtra(TAG_EMAIL, email);
-            intent.putExtra(TAG_LEVEL, level);
-            finish();
-            startActivity(intent);
+            if (level.equals("Wisatawan")) {
+                Intent intent = new Intent(Login.this, HomeActivity.class);
+                intent.putExtra(TAG_ID, id);
+                intent.putExtra(TAG_EMAIL, email);
+                intent.putExtra(TAG_LEVEL, level);
+                finish();
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(Login.this, HomeAdmin.class);
+                intent.putExtra(TAG_ID, id);
+                intent.putExtra(TAG_EMAIL, email);
+                intent.putExtra(TAG_LEVEL, level);
+                finish();
+                startActivity(intent);
+            }
         }
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,15 +109,11 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        //membuat back button toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
     }
 
     public void register (View v) {
-//        Intent intent = new Intent(Login.this, Register.class);
-//        startActivity(intent);
+        Intent intent = new Intent(Login.this, Register.class);
+        startActivity(intent);
     }
 
     private void checkLogin(final String email, final String password) {
@@ -136,7 +141,7 @@ public class Login extends AppCompatActivity {
                         editor.putBoolean(session_status, true);
                         editor.putString(TAG_ID, id);
                         editor.putString(TAG_EMAIL, email);
-//                        editor.putString(TAG_LEVEL, level);
+                        editor.putString(TAG_LEVEL, level);
                         editor.commit();
 
                         // Memanggil main activity
@@ -144,14 +149,14 @@ public class Login extends AppCompatActivity {
                             Intent intent = new Intent(Login.this, HomeActivity.class);
                             intent.putExtra(TAG_ID, id);
                             intent.putExtra(TAG_EMAIL, email);
-//                            intent.putExtra(TAG_LEVEL, level);
+                            intent.putExtra(TAG_LEVEL, level);
                             finish();
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(Login.this, HomeAdmin.class);
                             intent.putExtra(TAG_ID, id);
                             intent.putExtra(TAG_EMAIL, email);
-//                            intent.putExtra(TAG_LEVEL, level);
+                            intent.putExtra(TAG_LEVEL, level);
                             finish();
                             startActivity(intent);
                         }
@@ -199,16 +204,7 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent pilih = new Intent(getApplicationContext(), PilihActivity.class);
-        startActivity(pilih);
-    }
-
-    //membuat fungsi back dengan mengirim data session
-    @Override
-    public boolean onSupportNavigateUp() {
-        Intent pilih = new Intent(getApplicationContext(), PilihActivity.class);
-        startActivity(pilih);
-        return true;
+        moveTaskToBack(true);
     }
 
 }

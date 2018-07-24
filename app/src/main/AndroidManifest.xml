@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Register"
+            android:name=".SplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -30,13 +30,8 @@
         <activity
             android:name=".Wisatawan.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".PilihActivity" />
         <activity
-            android:name=".Wisatawan.Login"
-            android:label="Login Sebagai Wisatawan" />
-        <activity
-            android:name=".Admin.LoginAdmin"
-            android:label="Login Sebagai Admin" />
+            android:name=".Wisatawan.Login"/>
         <activity
             android:name=".Wisatawan.Profile"
             android:label="Profile" />
@@ -57,7 +52,7 @@
         <activity
             android:name=".Admin.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".SplashScreen"/>
+        <activity android:name=".Register"/>
     </application>
 
 </manifest>

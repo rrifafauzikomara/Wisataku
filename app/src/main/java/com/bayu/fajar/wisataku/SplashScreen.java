@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.bayu.fajar.wisataku.Wisatawan.Login;
+
 public class SplashScreen extends AppCompatActivity {
 
     //Set waktu lama splashscreen
@@ -24,7 +26,7 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(SplashScreen.this, PilihActivity.class);
+                Intent i = new Intent(SplashScreen.this, Login.class);
                 startActivity(i);
 
                 //jeda selesai Splashscreen

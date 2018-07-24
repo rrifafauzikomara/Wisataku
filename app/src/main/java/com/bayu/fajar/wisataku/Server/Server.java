@@ -14,6 +14,6 @@ public class Server {
     public static final String URLA = "http://wisatajawabarat.online/admin/";
 
     public static final String showProfil = URLU + "get_profile.php?id_user=";
-    public static final String showProfilA = URLA + "get_profile.php?id_admin=";
+    public static final String showProfilA = URLA + "get_profile.php?id_user=";
 
 }

@@ -21,6 +21,7 @@ import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.RequestHandler;
 import com.bayu.fajar.wisataku.Server.Server;
 import com.bayu.fajar.wisataku.Wisatawan.HomeActivity;
+import com.bayu.fajar.wisataku.Wisatawan.Login;
 import com.bayu.fajar.wisataku.Wisatawan.Profile;
 import com.squareup.picasso.Picasso;
 
@@ -35,14 +36,15 @@ public class HomeAdmin extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private EndDrawerToggle drawerToggle;
-    String idA;
+    String id, level;
 
     //untuk login session
-    SharedPreferences sharedpreferencesA;
-    public static final String TAG_ID = "id_admin";
+    SharedPreferences sharedpreferences;
+    public static final String TAG_ID = "id_user";
     public final static String TAG_NAMA = "nama";
     public final static String TAG_EMAIL = "email";
     public final static String TAG_FOTO = "foto";
+    public final static String TAG_LEVEL = "level";
 
     //untuk show profile
     private String urlp = Server.showProfilA;
@@ -56,8 +58,9 @@ public class HomeAdmin extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
-        sharedpreferencesA = getSharedPreferences(LoginAdmin.my_shared_preferences, Context.MODE_PRIVATE);
-        idA = sharedpreferencesA.getString(TAG_ID, null);
+        sharedpreferences = getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
+        id = sharedpreferences.getString(TAG_ID, null);
+        level = sharedpreferences.getString(TAG_LEVEL, null);
 
         initNavigationDrawer();
 
@@ -72,7 +75,7 @@ public class HomeAdmin extends AppCompatActivity {
                 switch (id){
                     case R.id.nav_admin_profile:
                         Intent intent = new Intent(HomeAdmin.this, AdminProfile.class);
-                        intent.putExtra(TAG_ID, idA);
+                        intent.putExtra(TAG_ID, id);
                         startActivity(intent);
                         break;
                     case R.id.nav_admin_maps:
@@ -127,7 +130,7 @@ public class HomeAdmin extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
                 RequestHandler rh = new RequestHandler();
-                String s = rh.sendGetRequestParam(urlp,idA);
+                String s = rh.sendGetRequestParam(urlp,id);
                 return s;
             }
         }
@@ -160,14 +163,14 @@ public class HomeAdmin extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                SharedPreferences.Editor editor = sharedpreferencesA.edit();
-                editor.putBoolean(LoginAdmin.session_status, false);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putBoolean(Login.session_status, false);
                 editor.putString(TAG_ID, null);
                 editor.putString(TAG_NAMA, null);
                 editor.putString(TAG_EMAIL, null);
                 editor.putString(TAG_FOTO, null);
                 editor.commit();
-                Intent intent = new Intent(HomeAdmin.this, LoginAdmin.class);
+                Intent intent = new Intent(HomeAdmin.this, Login.class);
                 finish();
                 startActivity(intent);
             }
