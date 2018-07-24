@@ -27,7 +27,7 @@ public class DetailLokasi extends AppCompatActivity {
         txt_time.setText(getIntent().getStringExtra("time"));
         txt_desk.setText(getIntent().getStringExtra("deskripsi"));
 
-        //membuat back button toolbar
+        //membuat back button
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Detail Wisata");
         setSupportActionBar(toolbar);
