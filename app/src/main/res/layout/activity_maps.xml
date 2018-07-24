@@ -32,6 +32,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/editbox_background_normal"/>
+
+        <EditText
+            android:id="@+id/deskripsiMaps"
+            android:layout_marginBottom="10dp"
+            android:hint="Deskripsi"
+            android:inputType="textMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background_normal"/>
+
+        <EditText
+            android:id="@+id/harga"
+            android:layout_marginBottom="10dp"
+            android:hint="Harga"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background_normal"/>
     </LinearLayout>
     <RelativeLayout
         android:layout_below="@+id/abc"

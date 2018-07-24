@@ -21,7 +21,6 @@ import com.bayu.fajar.wisataku.PilihActivity;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.AppController;
 import com.bayu.fajar.wisataku.Server.Server;
-import com.bayu.fajar.wisataku.Wisatawan.Login;
 
 import org.json.JSONException;
 import org.json.JSONObject;

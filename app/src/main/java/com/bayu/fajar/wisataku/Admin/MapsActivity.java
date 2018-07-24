@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -51,8 +49,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -76,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //tambah lokasi
     Double lng, lat;
     ProgressDialog pDialog;
-    EditText txt_idk;
+    EditText txt_nama, txt_desk, txt_harga;
     int success;
     ConnectivityManager conMgr;
     private String urlr = Server.URLA + "tambah_lokasi.php";
@@ -95,7 +91,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         //pendeklarasian variabel
-        txt_idk = findViewById(R.id.namaWis);
+        txt_nama = findViewById(R.id.namaWis);
+        txt_desk = findViewById(R.id.deskripsiMaps);
+        txt_harga = findViewById(R.id.harga);
     }
 
     public void tambah (View view) throws IOException {
@@ -108,22 +106,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+//        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         mLastLocation = mMap.getMyLocation();
         lng = mLastLocation.getLongitude();
         lat = mLastLocation.getLatitude();
-        List<Address> addresses  = geocoder.getFromLocation(lat, lng, 1);
+//        List<Address> addresses  = geocoder.getFromLocation(lat, lng, 1);
 
-        String lokasi = addresses.get(0).getAddressLine(0);
+//        String lokasi = addresses.get(0).getAddressLine(0);
+        String nama = txt_nama.getText().toString();
         String slng = Double.toString(lng);
         String slat = Double.toString(lat);
-        String idk = txt_idk.getText().toString();
         String tgl = mdformat.format(calendar.getTime());
         String time = date.format(currentLocalTime);
+        String deskripsi = txt_desk.getText().toString();
+        String harga = txt_harga.getText().toString();
         conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         {
             if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
-                simpanLokasi(lokasi, slng, slat, idk, tgl, time);
+                simpanLokasi(nama, slng, slat, tgl, time, deskripsi, harga);
             } else {
                 Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
             }
@@ -138,7 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //melakukan proses simpan data lokasi ke database
-    private void simpanLokasi(final String lokasi, final String slng, final String slat, final String idk, final String tgl, final String time) {
+    private void simpanLokasi(final String nama, final String slng, final String slat, final String tgl, final String time, final String deskripsi, final String harga) {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
         pDialog.setMessage("Tambah Lokasi ...");
@@ -158,7 +158,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         startActivity(login);
                         Log.e("Sukses Tambah Lokasi!", jObj.toString());
                         Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
-                        txt_idk.setText("");
+                        txt_nama.setText("");
+                        txt_desk.setText("");
+                        txt_harga.setText("");
                     } else {
                         Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     }
@@ -180,12 +182,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("nama", lokasi);
+                params.put("nama", nama);
                 params.put("lng", slng);
                 params.put("lat", slat);
-                params.put("id_kendaraan", idk);
                 params.put("tgl", tgl);
                 params.put("time", time);
+                params.put("deskripsi", deskripsi);
+                params.put("harga", harga);
                 return params;
             }
         };
