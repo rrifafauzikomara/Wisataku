@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.bayu.fajar.wisataku.Wisatawan.Login;
-
 public class SplashScreen extends AppCompatActivity {
 
     //Set waktu lama splashscreen

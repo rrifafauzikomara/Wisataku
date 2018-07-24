@@ -20,9 +20,7 @@ import android.widget.TextView;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.RequestHandler;
 import com.bayu.fajar.wisataku.Server.Server;
-import com.bayu.fajar.wisataku.Wisatawan.HomeActivity;
-import com.bayu.fajar.wisataku.Wisatawan.Login;
-import com.bayu.fajar.wisataku.Wisatawan.Profile;
+import com.bayu.fajar.wisataku.Login;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

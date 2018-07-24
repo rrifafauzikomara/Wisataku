@@ -31,7 +31,7 @@
             android:name=".Wisatawan.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Wisatawan.Login"/>
+            android:name=".Login"/>
         <activity
             android:name=".Wisatawan.Profile"
             android:label="Profile" />

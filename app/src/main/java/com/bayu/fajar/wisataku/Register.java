@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bayu.fajar.wisataku.Server.AppController;
 import com.bayu.fajar.wisataku.Server.Server;
-import com.bayu.fajar.wisataku.Wisatawan.Login;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +33,6 @@ public class Register extends AppCompatActivity {
     ProgressDialog pDialog;
     EditText txt_nama, txt_email, txt_password, txt_confirm_password;
     Spinner spLevel;
-    Intent intent;
     int success;
     ConnectivityManager conMgr;
     private String url = Server.URL + "register.php";
