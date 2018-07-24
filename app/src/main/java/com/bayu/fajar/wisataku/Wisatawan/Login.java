@@ -44,11 +44,12 @@ public class Login extends AppCompatActivity {
     private static final String TAG_MESSAGE = "message";
     public final static String TAG_ID = "id_user";
     public final static String TAG_EMAIL = "email";
+    public final static String TAG_LEVEL = "level";
 
     String tag_json_obj = "json_obj_req";
     SharedPreferences sharedpreferences;
     Boolean session = false;
-    String id, email;
+    String id, email, level;
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
 
@@ -66,11 +67,13 @@ public class Login extends AppCompatActivity {
         session = sharedpreferences.getBoolean(session_status, false);
         id = sharedpreferences.getString(TAG_ID, null);
         email = sharedpreferences.getString(TAG_EMAIL, null);
+        level = sharedpreferences.getString(TAG_LEVEL, null);
 
         if (session) {
             Intent intent = new Intent(Login.this, HomeActivity.class);
             intent.putExtra(TAG_ID, id);
             intent.putExtra(TAG_EMAIL, email);
+            intent.putExtra(TAG_LEVEL, level);
             finish();
             startActivity(intent);
         }
@@ -125,6 +128,7 @@ public class Login extends AppCompatActivity {
                     if (success == 1) {
                         String id = jObj.getString(TAG_ID);
                         String email = jObj.getString(TAG_EMAIL);
+                        String level = jObj.getString(TAG_LEVEL);
                         Log.e("Successfully Login!", jObj.toString());
                         Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         // menyimpan login ke session
@@ -132,13 +136,26 @@ public class Login extends AppCompatActivity {
                         editor.putBoolean(session_status, true);
                         editor.putString(TAG_ID, id);
                         editor.putString(TAG_EMAIL, email);
+//                        editor.putString(TAG_LEVEL, level);
                         editor.commit();
+
                         // Memanggil main activity
-                        Intent intent = new Intent(Login.this, HomeActivity.class);
-                        intent.putExtra(TAG_ID, id);
-                        intent.putExtra(TAG_EMAIL, email);
-                        finish();
-                        startActivity(intent);
+                        if (level.equals("Wisatawan")) {
+                            Intent intent = new Intent(Login.this, HomeActivity.class);
+                            intent.putExtra(TAG_ID, id);
+                            intent.putExtra(TAG_EMAIL, email);
+//                            intent.putExtra(TAG_LEVEL, level);
+                            finish();
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(Login.this, HomeAdmin.class);
+                            intent.putExtra(TAG_ID, id);
+                            intent.putExtra(TAG_EMAIL, email);
+//                            intent.putExtra(TAG_LEVEL, level);
+                            finish();
+                            startActivity(intent);
+                        }
+
                     } else if (success == 2) {
                         Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
