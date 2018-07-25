@@ -78,6 +78,7 @@ public class HomeAdmin extends AppCompatActivity {
                         break;
                     case R.id.nav_admin_maps:
                         Intent maps = new Intent(HomeAdmin.this, MapsActivity.class);
+                        maps.putExtra(TAG_ID, idx);
                         startActivity(maps);
                         break;
                     case R.id.nav_admin_list:

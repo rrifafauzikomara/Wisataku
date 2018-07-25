@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.AppController;
+import com.bayu.fajar.wisataku.Server.RequestHandler;
 import com.bayu.fajar.wisataku.Server.Server;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -67,7 +69,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String TITLE = "nama";
     public static final String LAT = "lat";
     public static final String LNG = "lng";
-    private String url = Server.URLA + "lokasi.php";
+    private String url = Server.URLA + "lokasi.php?id_user=";
+
+    String id;
+    private String TAG_ID = "id_user";
+    EditText txt_id;
 
     //tambah lokasi
     Double lng, lat;
@@ -86,14 +92,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        Intent intent = getIntent();
+        id = intent.getStringExtra(TAG_ID);
+
         // Memuat SupportMapFragment dan memberi notifikasi saat telah siap.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         //pendeklarasian variabel
+        txt_id = findViewById(R.id.txt_id);
         txt_nama = findViewById(R.id.namaWis);
         txt_desk = findViewById(R.id.deskripsiMaps);
         txt_harga = findViewById(R.id.harga);
+
+        txt_id.setText(id);
     }
 
     public void tambah (View view) throws IOException {
@@ -120,10 +132,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String time = date.format(currentLocalTime);
         String deskripsi = txt_desk.getText().toString();
         String harga = txt_harga.getText().toString();
+        String id_user = txt_id.getText().toString();
         conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         {
             if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
-                simpanLokasi(nama, slng, slat, tgl, time, deskripsi, harga);
+                simpanLokasi(nama, slng, slat, tgl, time, deskripsi, harga, id_user);
             } else {
                 Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
             }
@@ -138,7 +151,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //melakukan proses simpan data lokasi ke database
-    private void simpanLokasi(final String nama, final String slng, final String slat, final String tgl, final String time, final String deskripsi, final String harga) {
+    private void simpanLokasi(final String nama, final String slng, final String slat, final String tgl, final String time, final String deskripsi, final String harga, final String id_user) {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
         pDialog.setMessage("Tambah Lokasi ...");
@@ -189,6 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 params.put("time", time);
                 params.put("deskripsi", deskripsi);
                 params.put("harga", harga);
+                params.put("id_user", id_user);
                 return params;
             }
         };
@@ -242,36 +256,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //menampilkan data lokasi dari database ke googlemaps
-    private void getMarkers() {
-        StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("Response: ", response.toString());
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    String getObject = jObj.getString("Lokasi");
-                    JSONArray jsonArray = new JSONArray(getObject);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        title = jsonObject.getString(TITLE);
-                        latLng = new LatLng(Double.parseDouble(jsonObject.getString(LAT)), Double.parseDouble(jsonObject.getString(LNG)));
+    private void showMarkers(String response){
+        Log.e("Response: ", response.toString());
+        try {
+            JSONObject jObj = new JSONObject(response);
+            String getObject = jObj.getString("Lokasi");
+            JSONArray jsonArray = new JSONArray(getObject);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                title = jsonObject.getString(TITLE);
+                latLng = new LatLng(Double.parseDouble(jsonObject.getString(LAT)), Double.parseDouble(jsonObject.getString(LNG)));
 
-                        // Menambah data marker untuk di tampilkan ke google map
-                        addMarker(latLng, title);
-                    }
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
-                }
+                // Menambah data marker untuk di tampilkan ke google map
+                addMarker(latLng, title);
             }
-        }, new Response.ErrorListener() {
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getMarkers(){
+        class GetUser extends AsyncTask<Void,Void,String> {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error: ", error.getMessage());
-                Toast.makeText(MapsActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            protected void onPreExecute() {
+                super.onPreExecute();
             }
-        });
-        AppController.getInstance().addToRequestQueue(strReq, tag_json_obj);
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                showMarkers(s);
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                RequestHandler rh = new RequestHandler();
+                String s = rh.sendGetRequestParam(url,id);
+                return s;
+            }
+        }
+        GetUser gu = new GetUser();
+        gu.execute();
     }
 
     private void buildGoogleApiClient() {
