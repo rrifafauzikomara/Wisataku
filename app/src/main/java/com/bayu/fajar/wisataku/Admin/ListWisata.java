@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.AdapterData;
+import com.bayu.fajar.wisataku.Server.AdapterDataAdmin;
 import com.bayu.fajar.wisataku.Server.AppController;
 import com.bayu.fajar.wisataku.Server.ModelData;
 import com.bayu.fajar.wisataku.Server.RequestHandler;
@@ -65,7 +66,7 @@ public class ListWisata extends AppCompatActivity {
         loadJson();
         mManager = new LinearLayoutManager(ListWisata.this,LinearLayoutManager.VERTICAL,false);
         mRecyclerview.setLayoutManager(mManager);
-        mAdapter = new AdapterData(ListWisata.this,mItems);
+        mAdapter = new AdapterDataAdmin(ListWisata.this,mItems);
         mRecyclerview.setAdapter(mAdapter);
 
         //membuat back button toolbar

@@ -10,16 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bayu.fajar.wisataku.Admin.UpdateLokasi;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Wisatawan.DetailLokasi;
 
 import java.util.List;
 
-public class AdapterData extends RecyclerView.Adapter<AdapterData.HolderData> {
+public class AdapterDataAdmin extends RecyclerView.Adapter<AdapterDataAdmin.HolderData> {
 
     private List<ModelData> mItems ;
     private Context context;
-    public AdapterData (Context context, List<ModelData> items) {
+    public AdapterDataAdmin (Context context, List<ModelData> items) {
         this.mItems = items;
         this.context = context;
     }
@@ -45,7 +46,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.HolderData> {
         holder.cd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), DetailLokasi.class);
+                Intent i = new Intent(v.getContext(), UpdateLokasi.class);
                 i.putExtra("nama", mItems.get(position).getNama());
                 i.putExtra("lng", mItems.get(position).getLng());
                 i.putExtra("lat", mItems.get(position).getLat());

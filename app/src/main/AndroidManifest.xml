@@ -60,7 +60,10 @@
         <activity
             android:name=".Register"
             android:label="Register" />
-        <activity android:name=".Admin.ListWisata"/>
+        <activity
+            android:name=".Admin.ListWisata"
+            android:label="List Wisata" />
+        <activity android:name=".Admin.UpdateLokasi"></activity>
     </application>
 
 </manifest>
