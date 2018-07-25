@@ -82,7 +82,9 @@ public class HomeAdmin extends AppCompatActivity {
                         startActivity(maps);
                         break;
                     case R.id.nav_admin_list:
-
+                        Intent list = new Intent(HomeAdmin.this, ListWisata.class);
+                        list.putExtra(TAG_ID, idx);
+                        startActivity(list);
                         break;
                     case R.id.nav_admin_logout:
                         logout();

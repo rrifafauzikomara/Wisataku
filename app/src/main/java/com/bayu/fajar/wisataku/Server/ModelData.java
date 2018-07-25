@@ -10,19 +10,20 @@ public class ModelData {
     String time;
     String deskripsi;
     String harga;
+    String id_user;
 
     public ModelData(){}
 
-    public ModelData(String id, String nama, String lng, String lat, String date, String time, String deskripsi, String harga) {
+    public ModelData(String id, String nama, String lng, String lat, String date, String time, String deskripsi, String harga, String id_user) {
         this.id = id;
         this.nama = nama;
         this.lng = lng;
-
         this.lat = lat;
         this.date = date;
         this.time = time;
         this.deskripsi = deskripsi;
         this.harga = harga;
+        this.id_user = id_user;
     }
 
     public String getId() {
@@ -89,4 +90,11 @@ public class ModelData {
         this.harga = harga;
     }
 
+    public String getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
+    }
 }
