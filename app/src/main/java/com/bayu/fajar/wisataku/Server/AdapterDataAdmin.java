@@ -47,6 +47,7 @@ public class AdapterDataAdmin extends RecyclerView.Adapter<AdapterDataAdmin.Hold
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), UpdateLokasi.class);
+                i.putExtra("id_lokasi", mItems.get(position).getId());
                 i.putExtra("nama", mItems.get(position).getNama());
                 i.putExtra("lng", mItems.get(position).getLng());
                 i.putExtra("lat", mItems.get(position).getLat());

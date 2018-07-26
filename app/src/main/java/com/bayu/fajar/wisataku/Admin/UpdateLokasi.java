@@ -29,8 +29,7 @@ import java.util.Map;
 
 public class UpdateLokasi extends AppCompatActivity {
 
-    TextView txt_id;
-    EditText txt_nama, txt_lng, txt_lat, txt_tgl, txt_time, txt_desk, txt_harga;
+    EditText txt_id, txt_nama, txt_lng, txt_lat, txt_tgl, txt_time, txt_desk, txt_harga;
 
     //untuk delete lokasi
     private String urld = Server.URLA + "delete_lokasi.php";
@@ -78,86 +77,6 @@ public class UpdateLokasi extends AppCompatActivity {
 
     }
 
-//    public void update (View v) {
-//        String id = txt_id.getText().toString();
-//        String desk = txt_desk.getText().toString();
-//        String harga = txt_harga.getText().toString();
-//
-//        conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);{
-//            if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
-//                updateLokasi(id, desk, harga);
-//            } else {
-//                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
-//
-//    private void updateLokasi (final String id, final String desk, final String harga) {
-//        pdu = new ProgressDialog(this);
-//        pdu.setCancelable(false);
-//        pdu.setMessage("Update ...");
-//        showDialog();
-//        StringRequest strReq = new StringRequest(Request.Method.POST, urlu, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Log.e(TAG, "Update Response: " + response.toString());
-//                hideDialog();
-//                try {
-//                    JSONObject jObj = new JSONObject(response);
-//                    success = jObj.getInt(TAG_SUCCESS);
-//                    // Check for error node in json
-//                    if (success == 1) {
-//                        Intent login = new Intent(UpdateLokasi.this, HomeAdmin.class);
-//                        startActivity(login);
-//                        Log.e("Update berhasil", jObj.toString());
-//                        Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
-//                        txt_id.setText("");
-//                        txt_desk.setText("");
-//                        txt_harga.setText("");
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
-//                    }
-//                } catch (JSONException e) {
-//                    // JSON error
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e(TAG, "Update Error : " + error.getMessage());
-//                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-//                hideDialog();
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                // Posting parameters to login url
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("id_lokasi", id);
-//                params.put("deskripsi", desk);
-//                params.put("harga", harga);
-//                return params;
-//            }
-//        };
-//        // Adding request to request queue
-//        AppController.getInstance().addToRequestQueue(strReq, tag_json_obj);
-//    }
-//
-//    private void showDialog() {
-//        if (!pdu.isShowing())
-//            pdu.show();
-//    }
-//
-//    private void hideDialog() {
-//        if (pdu.isShowing())
-//            pdu.dismiss();
-//    }
-//
-//    public void delete (View view) {
-//        deleteData();
-//    }
-
     //membuat fungsi back dengan mengirim data session
     @Override
     public boolean onSupportNavigateUp() {
@@ -172,41 +91,124 @@ public class UpdateLokasi extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //    //melakukan eksekusi delete data lokasi
-//    private void deleteData() {
-//        pdd.setMessage("Delete Data ...");
-//        pdd.setCancelable(false);
-//        pdd.show();
-//        StringRequest delReq = new StringRequest(Request.Method.POST, urld, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                pdd.cancel();
-//                Log.d("volley","response : " + response.toString());
-//                try {
-//                    JSONObject res = new JSONObject(response);
-//                    Toast.makeText(UpdateLokasi.this,res.getString("message"), Toast.LENGTH_SHORT).show();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                startActivity(new Intent(UpdateLokasi.this, HomeAdmin.class));
-//            }
-//        },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        pdd.cancel();
-//                        Log.d("volley", "error : " + error.getMessage());
-//                        Toast.makeText(UpdateLokasi.this, "Gagal menghapus lokasi", Toast.LENGTH_SHORT).show();
-//                    }
-//                }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<>();
-//                map.put("id_lokasi", txt_id.getText().toString());
-//                return map;
-//            }
-//        };
-//        AppController.getInstance().addToRequestQueue(delReq);
-//    }
+    public void update (View v) {
+        String id = txt_id.getText().toString();
+        String nama = txt_nama.getText().toString();
+        String desk = txt_desk.getText().toString();
+        String harga = txt_harga.getText().toString();
+
+        conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);{
+            if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
+                updateLokasi(id, nama, desk, harga);
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void updateLokasi (final String id, final String nama, final String desk, final String harga) {
+        pdu = new ProgressDialog(this);
+        pdu.setCancelable(false);
+        pdu.setMessage("Update ...");
+        showDialog();
+        StringRequest strReq = new StringRequest(Request.Method.POST, urlu, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "Update Response: " + response.toString());
+                hideDialog();
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    success = jObj.getInt(TAG_SUCCESS);
+                    // Check for error node in json
+                    if (success == 1) {
+                        Intent login = new Intent(UpdateLokasi.this, HomeAdmin.class);
+                        startActivity(login);
+                        Log.e("Update berhasil", jObj.toString());
+                        Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
+                        txt_id.setText("");
+                        txt_nama.setText("");
+                        txt_desk.setText("");
+                        txt_harga.setText("");
+                    } else {
+                        Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Update Error : " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id_lokasi", id);
+                params.put("nama", nama);
+                params.put("deskripsi", desk);
+                params.put("harga", harga);
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_json_obj);
+    }
+
+    private void showDialog() {
+        if (!pdu.isShowing())
+            pdu.show();
+    }
+
+    private void hideDialog() {
+        if (pdu.isShowing())
+            pdu.dismiss();
+    }
+
+    public void delete (View view) {
+        deleteData();
+    }
+
+    //melakukan eksekusi delete data lokasi
+    private void deleteData() {
+        pdd.setMessage("Delete Data ...");
+        pdd.setCancelable(false);
+        pdd.show();
+        StringRequest delReq = new StringRequest(Request.Method.POST, urld, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pdd.cancel();
+                Log.d("volley","response : " + response.toString());
+                try {
+                    JSONObject res = new JSONObject(response);
+                    Toast.makeText(UpdateLokasi.this,res.getString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(new Intent(UpdateLokasi.this, HomeAdmin.class));
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pdd.cancel();
+                        Log.d("volley", "error : " + error.getMessage());
+                        Toast.makeText(UpdateLokasi.this, "Gagal menghapus lokasi", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("id_lokasi", txt_id.getText().toString());
+                return map;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(delReq);
+    }
 
 }
