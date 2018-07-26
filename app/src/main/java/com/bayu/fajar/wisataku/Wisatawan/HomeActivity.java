@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,11 +24,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bayu.fajar.wisataku.Login;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.AdapterData;
@@ -40,12 +46,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
     View header;
     TextView txt_nama, txt_email;
@@ -64,11 +73,13 @@ public class HomeActivity extends AppCompatActivity
     private String urlp = Server.showProfil;
 
     //untuk menampilkan data pada recyclerview
-    RecyclerView mRecyclerview;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mManager;
-    List<ModelData> mItems;
     ProgressDialog pd;
+    List<ModelData> mItems = new ArrayList<>();
+    RecyclerView.Adapter mAdapter;
+    SwipeRefreshLayout swipe;
+    RecyclerView mRecyclerview;
+    RecyclerView.LayoutManager mManager;
+
     private String urld = Server.URLU + "detail_lokasi.php";
     public static final String TAG_IDL       = "id_lokasi";
     public static final String TAG_NAMAL     = "nama";
@@ -78,6 +89,14 @@ public class HomeActivity extends AppCompatActivity
     public static final String TAG_TIME      = "time";
     public static final String TAG_DESKRIPSI = "deskripsi";
     public static final String TAG_HARGA = "harga";
+
+    //untuk mencari data lokasi
+    private String urlc = Server.URLU + "cari_lokasi.php";
+    public static final String TAG_VALUE = "value";
+    private static final String TAG_MESSAGE = "message";
+    public static final String TAG_RESULTS = "results";
+    private static final String TAG = HomeActivity.class.getSimpleName();
+    String tag_json_obj = "json_obj_req";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,71 +135,38 @@ public class HomeActivity extends AppCompatActivity
         getUserProfile();
 
         //menampilkan data lokasi dari database ke recycleview
+        swipe = findViewById(R.id.swipe_refresh);
         mRecyclerview = findViewById(R.id.recyclerviewTemp);
-        pd = new ProgressDialog(HomeActivity.this);
-        mItems = new ArrayList<>();
-        loadJson();
+
         mManager = new LinearLayoutManager(HomeActivity.this,LinearLayoutManager.VERTICAL,false);
         mRecyclerview.setLayoutManager(mManager);
+
         mAdapter = new AdapterData(HomeActivity.this,mItems);
         mRecyclerview.setAdapter(mAdapter);
 
-    }
+        swipe.setOnRefreshListener(this);
 
-    //melakukan pengambilan data dari database
-    private void loadJson() {
-        pd.setMessage("Mengambil Data");
-        pd.setCancelable(false);
-        pd.show();
-        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.POST, urld,null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                pd.cancel();
-                Log.d("volley","response : " + response.toString());
-                for(int i = 0 ; i < response.length(); i++)
-                {
-                    try {
-                        JSONObject data = response.getJSONObject(i);
-                        ModelData md = new ModelData();
-                        md.setId(data.getString(TAG_IDL));
-                        md.setNama(data.getString(TAG_NAMAL));
-//                        md.setLng(data.getString(TAG_LNG));
-//                        md.setLat(data.getString(TAG_LAT));
-                        md.setDate(data.getString(TAG_TGL));
-                        md.setTime(data.getString(TAG_TIME));
-                        md.setDeskripsi(data.getString(TAG_DESKRIPSI));
-                        md.setHarga(data.getString(TAG_HARGA));
-                        mItems.add(md);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        pd.cancel();
-                        Log.d("volley", "error : " + error.getMessage());
-                    }
-                });
-        AppController.getInstance().addToRequestQueue(reqData);
+        swipe.post(new Runnable() {
+                       @Override
+                       public void run() {
+                           swipe.setRefreshing(true);
+                           loadJson();
+                       }
+                   }
+        );
+
     }
 
     private void getUserProfile(){
         class GetUser extends AsyncTask<Void,Void,String> {
-            ProgressDialog loading;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(HomeActivity.this,"Tunggu",".....",false,false);
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                loading.dismiss();
                 showUser(s);
             }
 
@@ -211,6 +197,141 @@ public class HomeActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    //melakukan pengambilan data dari database
+    private void loadJson() {
+        mItems.clear();
+        mAdapter.notifyDataSetChanged();
+        swipe.setRefreshing(true);
+
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.POST, urld,null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                for(int i = 0 ; i < response.length(); i++)
+                {
+                    try {
+                        JSONObject data = response.getJSONObject(i);
+                        ModelData md = new ModelData();
+                        md.setId(data.getString(TAG_IDL));
+                        md.setNama(data.getString(TAG_NAMAL));
+//                        md.setLng(data.getString(TAG_LNG));
+//                        md.setLat(data.getString(TAG_LAT));
+                        md.setDate(data.getString(TAG_TGL));
+                        md.setTime(data.getString(TAG_TIME));
+                        md.setDeskripsi(data.getString(TAG_DESKRIPSI));
+                        md.setHarga(data.getString(TAG_HARGA));
+                        mItems.add(md);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+                swipe.setRefreshing(false);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.e(TAG, "Error: " + error.getMessage());
+                        Toast.makeText(HomeActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        swipe.setRefreshing(false);
+                    }
+                });
+        AppController.getInstance().addToRequestQueue(reqData);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        cariData(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    private void cariData(final String keyword) {
+        pd = new ProgressDialog(HomeActivity.this);
+        pd.setCancelable(false);
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST, urlc, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("Response: ", response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+
+                    int value = jObj.getInt(TAG_VALUE);
+
+                    if (value == 1) {
+                        mItems.clear();
+                        mAdapter.notifyDataSetChanged();
+
+                        String getObject = jObj.getString(TAG_RESULTS);
+                        JSONArray jsonArray = new JSONArray(getObject);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.getJSONObject(i);
+
+                            ModelData data = new ModelData();
+
+                            data.setId(obj.getString(TAG_IDL));
+                            data.setNama(obj.getString(TAG_NAMAL));
+                            data.setDate(obj.getString(TAG_TGL));
+                            data.setTime(obj.getString(TAG_TIME));
+                            data.setDeskripsi(obj.getString(TAG_DESKRIPSI));
+                            data.setHarga(obj.getString(TAG_HARGA));
+
+                            mItems.add(data);
+                        }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+
+                mAdapter.notifyDataSetChanged();
+                pd.dismiss();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                pd.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("nama", keyword);
+
+                return params;
+            }
+
+        };
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_json_obj);
+    }
+
+
+    @Override
+    public void onRefresh() {
+        loadJson();
     }
 
     private void logout(){
@@ -259,6 +380,11 @@ public class HomeActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setQueryHint(getString(R.string.type_name));
+        searchView.setIconified(true);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -270,7 +396,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
@@ -298,4 +424,5 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

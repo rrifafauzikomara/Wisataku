@@ -12,4 +12,5 @@
     <string name="register">Register</string>
     <string name="tanggal">Tanggal</string>
     <string name="title_activity_maps">Map</string>
+    <string name="type_name">Cari Lokasi</string>
 </resources>
