@@ -63,8 +63,12 @@
         <activity
             android:name=".Admin.ListWisata"
             android:label="List Wisata" />
-        <activity android:name=".Admin.UpdateLokasi"
-            android:label="Update Wisata"/>
+        <activity
+            android:name=".Admin.UpdateLokasi"
+            android:label="Update Wisata" />
+        <activity
+            android:name=".Wisatawan.WisataActivity"
+            android:label="@string/title_activity_wisata"></activity>
     </application>
 
 </manifest>

@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bayu.fajar.wisataku.Admin.MapsActivity;
 import com.bayu.fajar.wisataku.Login;
 import com.bayu.fajar.wisataku.R;
 import com.bayu.fajar.wisataku.Server.AdapterData;
@@ -414,8 +415,8 @@ public class HomeActivity extends AppCompatActivity
             intent.putExtra(TAG_ID, idx);
             startActivity(intent);
         } else if (id == R.id.nav_maps) {
-//            Intent maps = new Intent(HomeActivity.this, MapsActivity.class);
-//            startActivity(maps);
+            Intent maps = new Intent(HomeActivity.this, WisataActivity.class);
+            startActivity(maps);
         } else if (id == R.id.nav_logout) {
             logout();
         }
