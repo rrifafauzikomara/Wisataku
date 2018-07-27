@@ -90,6 +90,9 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="15dp"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_upload"
             android:text="Simpan Perubahan"
             android:padding="10dp"
             android:layout_alignParentEnd="true"/>

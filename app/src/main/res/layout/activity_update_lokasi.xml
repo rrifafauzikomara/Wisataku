@@ -198,12 +198,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_update"
             android:onClick="update"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_upload"
             android:text="Update"/>
 
         <Button
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
             android:onClick="delete"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/delete"

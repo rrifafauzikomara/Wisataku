@@ -103,6 +103,7 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:onClick="daftar"
+            android:textAllCaps="false"
             android:background="@drawable/bg_upload"
             android:textColor="@android:color/white"
             android:singleLine="true"
