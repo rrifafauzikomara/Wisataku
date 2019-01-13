@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Admin;
+package com.bayu.fajar.wisataku.view.admin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,8 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Server.AppController;
-import com.bayu.fajar.wisataku.Server.Server;
+import com.bayu.fajar.wisataku.api.AppController;
+import com.bayu.fajar.wisataku.api.Server;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Wisatawan;
+package com.bayu.fajar.wisataku.view.wisatawan;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

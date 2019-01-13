@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Server;
+package com.bayu.fajar.wisataku.model;
 
 public class ModelData {
 

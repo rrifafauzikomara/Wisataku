@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Server;
+package com.bayu.fajar.wisataku.api;
 
 import android.app.Application;
 import android.text.TextUtils;

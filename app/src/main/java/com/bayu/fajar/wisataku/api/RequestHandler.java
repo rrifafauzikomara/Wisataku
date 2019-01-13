@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Server;
+package com.bayu.fajar.wisataku.api;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

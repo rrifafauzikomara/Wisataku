@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Wisatawan;
+package com.bayu.fajar.wisataku.view.wisatawan;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,9 +24,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Server.AppController;
-import com.bayu.fajar.wisataku.Server.RequestHandler;
-import com.bayu.fajar.wisataku.Server.Server;
+import com.bayu.fajar.wisataku.api.AppController;
+import com.bayu.fajar.wisataku.api.RequestHandler;
+import com.bayu.fajar.wisataku.api.Server;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

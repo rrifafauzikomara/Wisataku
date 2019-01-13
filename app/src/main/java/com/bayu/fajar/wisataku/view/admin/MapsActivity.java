@@ -1,10 +1,13 @@
-package com.bayu.fajar.wisataku.Admin;
+package com.bayu.fajar.wisataku.view.admin;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -24,12 +27,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Server.AppController;
-import com.bayu.fajar.wisataku.Server.RequestHandler;
-import com.bayu.fajar.wisataku.Server.Server;
+import com.bayu.fajar.wisataku.api.AppController;
+import com.bayu.fajar.wisataku.api.RequestHandler;
+import com.bayu.fajar.wisataku.api.Server;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,6 +43,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,10 +55,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     //menampilkan lokasi berbasis google maps
     GoogleMap mMap;
@@ -86,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     String tag_json_obj = "json_obj_req";
+    FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +105,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
+        } else {
+            buildLocationRequest();
+        }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations, this can be null.
+                        mLastLocation = location;
+                        if (mCurrLocationMarker != null) {
+                            mCurrLocationMarker.remove();
+                        }
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                        //menghentikan pembaruan lokasi
+//                        if (mGoogleApiClient != null) {
+//                            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//                        }
+                    }
+                });
+
         //pendeklarasian variabel
         txt_id = findViewById(R.id.txt_id);
         txt_nama = findViewById(R.id.namaWis);
@@ -108,18 +140,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         txt_id.setText(id);
     }
 
-    public void tambah (View view) throws IOException {
+    public void tambah(View view) throws IOException {
 
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+7:00"));
         Date currentLocalTime = cal.getTime();
-        DateFormat date = new SimpleDateFormat("HH:mm a");
+        DateFormat date = new SimpleDateFormat("HH:mm a", Locale.getDefault());
         date.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
+        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ", Locale.getDefault());
 
 //        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        mLastLocation = mMap.getMyLocation();
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
+            return;
+        }
+        mLastLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         lng = mLastLocation.getLongitude();
         lat = mLastLocation.getLatitude();
 //        List<Address> addresses  = geocoder.getFromLocation(lat, lng, 1);
@@ -159,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         StringRequest strReq = new StringRequest(Request.Method.POST, urlr, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e(TAG, "Tambah Lokasi Response: " + response.toString());
+                Log.e(TAG, "Tambah Lokasi Response: " + response);
                 hideDialog();
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -167,7 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     // Check for error node in json
                     if (success == 1) {
-                        Intent login = new Intent(MapsActivity.this, MapsActivity.class);
+                        Intent login = new Intent(MapsActivity.this, HomeAdmin.class);
                         startActivity(login);
                         Log.e("Sukses Tambah Lokasi!", jObj.toString());
                         Toast.makeText(getApplicationContext(), jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
@@ -305,42 +343,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mGoogleApiClient.connect();
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    private void buildLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
+        mLocationRequest.setSmallestDisplacement(10);
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        //menghentikan pembaruan lokasi
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-    }
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        mLastLocation = location;
+//        if (mCurrLocationMarker != null) {
+//            mCurrLocationMarker.remove();
+//        }
+//        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+//        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//
+//        //menghentikan pembaruan lokasi
+//        if (mGoogleApiClient != null) {
+//            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//        }
+//    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean checkLocationPermission(){
@@ -393,4 +418,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

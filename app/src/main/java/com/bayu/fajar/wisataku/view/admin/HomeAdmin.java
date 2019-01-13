@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Admin;
+package com.bayu.fajar.wisataku.view.admin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,9 +18,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Server.RequestHandler;
-import com.bayu.fajar.wisataku.Server.Server;
-import com.bayu.fajar.wisataku.Login;
+import com.bayu.fajar.wisataku.api.RequestHandler;
+import com.bayu.fajar.wisataku.api.Server;
+import com.bayu.fajar.wisataku.view.Login;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

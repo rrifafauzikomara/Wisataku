@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku;
+package com.bayu.fajar.wisataku.view;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,10 +17,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.bayu.fajar.wisataku.Admin.HomeAdmin;
-import com.bayu.fajar.wisataku.Server.AppController;
-import com.bayu.fajar.wisataku.Server.Server;
-import com.bayu.fajar.wisataku.Wisatawan.HomeActivity;
+import com.bayu.fajar.wisataku.R;
+import com.bayu.fajar.wisataku.view.admin.HomeAdmin;
+import com.bayu.fajar.wisataku.api.AppController;
+import com.bayu.fajar.wisataku.api.Server;
+import com.bayu.fajar.wisataku.view.wisatawan.HomeActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

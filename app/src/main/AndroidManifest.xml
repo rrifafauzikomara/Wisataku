@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bayu.fajar.wisataku">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,15 +11,16 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name=".Server.AppController"
+        android:name=".api.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".SplashScreen"
+            android:name=".view.SplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -28,23 +30,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Wisatawan.HomeActivity"
+            android:name=".view.wisatawan.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Login"
+            android:name=".view.Login"
             android:theme="@style/AppTheme.SplashScreen" />
         <activity
-            android:name=".Wisatawan.Profile"
+            android:name=".view.wisatawan.Profile"
             android:label="Profile" />
         <activity
-            android:name=".Wisatawan.DetailLokasi"
+            android:name=".view.wisatawan.DetailLokasi"
             android:theme="@style/AppTheme.SplashScreen" />
         <activity
-            android:name=".Admin.HomeAdmin"
+            android:name=".view.admin.HomeAdmin"
             android:label="Admin"
             android:theme="@style/AppTheme.SplashScreen" />
         <activity
-            android:name=".Admin.AdminProfile"
+            android:name=".view.admin.AdminProfile"
             android:label="Profile" />
 
         <meta-data
@@ -55,19 +57,19 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".Admin.MapsActivity"
+            android:name=".view.admin.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".Register"
+            android:name=".view.Register"
             android:label="Register" />
         <activity
-            android:name=".Admin.ListWisata"
+            android:name=".view.admin.ListWisata"
             android:label="List Wisata" />
         <activity
-            android:name=".Admin.UpdateLokasi"
+            android:name=".view.admin.UpdateLokasi"
             android:label="Update Wisata" />
         <activity
-            android:name=".Wisatawan.WisataActivity"
+            android:name=".view.wisatawan.WisataActivity"
             android:label="@string/title_activity_wisata"></activity>
     </application>
 

@@ -1,8 +1,7 @@
-package com.bayu.fajar.wisataku.Admin;
+package com.bayu.fajar.wisataku.view.admin;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,15 +13,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Server.AdapterData;
-import com.bayu.fajar.wisataku.Server.AdapterDataAdmin;
-import com.bayu.fajar.wisataku.Server.AppController;
-import com.bayu.fajar.wisataku.Server.ModelData;
-import com.bayu.fajar.wisataku.Server.RequestHandler;
-import com.bayu.fajar.wisataku.Server.Server;
-import com.bayu.fajar.wisataku.Wisatawan.DetailLokasi;
-import com.google.android.gms.maps.model.LatLng;
-import com.squareup.picasso.Picasso;
+import com.bayu.fajar.wisataku.adapter.AdapterDataAdmin;
+import com.bayu.fajar.wisataku.api.AppController;
+import com.bayu.fajar.wisataku.model.ModelData;
+import com.bayu.fajar.wisataku.api.Server;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Server;
+package com.bayu.fajar.wisataku.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bayu.fajar.wisataku.Admin.UpdateLokasi;
+import com.bayu.fajar.wisataku.view.admin.UpdateLokasi;
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Wisatawan.DetailLokasi;
+import com.bayu.fajar.wisataku.model.ModelData;
 
 import java.util.List;
 

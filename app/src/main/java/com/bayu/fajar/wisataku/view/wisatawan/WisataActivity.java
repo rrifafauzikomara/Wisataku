@@ -1,4 +1,4 @@
-package com.bayu.fajar.wisataku.Wisatawan;
+package com.bayu.fajar.wisataku.view.wisatawan;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,11 +18,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.bayu.fajar.wisataku.Admin.HomeAdmin;
-import com.bayu.fajar.wisataku.Admin.MapsActivity;
 import com.bayu.fajar.wisataku.R;
-import com.bayu.fajar.wisataku.Server.AppController;
-import com.bayu.fajar.wisataku.Server.Server;
+import com.bayu.fajar.wisataku.api.AppController;
+import com.bayu.fajar.wisataku.api.Server;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
