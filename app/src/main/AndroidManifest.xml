@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".api.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -49,6 +50,8 @@
             android:name=".view.admin.AdminProfile"
             android:label="Profile" />
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -70,7 +73,7 @@
             android:label="Update Wisata" />
         <activity
             android:name=".view.wisatawan.WisataActivity"
-            android:label="@string/title_activity_wisata"></activity>
+            android:label="@string/title_activity_wisata"/>
     </application>
 
 </manifest>
